@@ -6,18 +6,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Supabase DB Connection
 def get_db():
-    return psycopg2.connect(os.getenv("https://nkkekmsbekysayxaluqy.supabase.co"))
+    return psycopg2.connect(os.getenv("postgresql://postgres:[YOUR-PASSWORD]@db.nkkekmsbekysayxaluqy.supabase.co:5432/postgres"))  # Use your Supabase PostgreSQL URL
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("Talker 👤", callback_data="mode_talker")],
         [InlineKeyboardButton("Listener 👂", callback_data="mode_listener")]
     ]
-    await update.message.reply_text(
+    await update.message.reply_text(  # <- Closing parenthesis was missing here
         "Choose your role:",
         reply_markup=InlineKeyboardMarkup(keyboard)
+    )  # <- Now properly closed
     
     # Save user to Supabase
     with get_db() as conn:
@@ -27,6 +27,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 VALUES (%s)
                 ON CONFLICT (telegram_id) DO NOTHING
             """, (update.effective_user.id,))
+
+async def set_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer(f"Selected: {query.data.split('_')[1]} mode")
 
 def main():
     app = Application.builder().token(os.getenv("8219874666:AAHZBrk6t6IzSxOzUI_PlMIZwNcSpXCnR7w")).build()
