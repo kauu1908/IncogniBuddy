@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_db():
-    return psycopg2.connect(os.getenv("postgresql://postgres:[YOUR-PASSWORD]@db.nkkekmsbekysayxaluqy.supabase.co:5432/postgres"))  # Use your Supabase PostgreSQL URL
+    return psycopg2.connect(os.getenv("postgresql://postgres:[Kauzma$1908]@db.nkkekmsbekysayxaluqy.supabase.co:5432/postgres"))  # Use your Supabase PostgreSQL URL
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
